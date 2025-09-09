@@ -24,6 +24,9 @@ variable "LB-rule" {
   
 }
 
-variable "network_interface_name" {
+variable "vm1nic" {
+  
+}
+variable "vm2nic" {
   
 }
