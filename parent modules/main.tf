@@ -23,7 +23,7 @@ module "backend_subnet" {
 }
 
 module "backendpoolvm1" {
-  depends_on = [module.backend_subnet, module.backend_subnet, module.resource_group]
+  depends_on = [module.backend_subnet, module.resource_group,module.virtual_network]
   source     = "../modules/azurerm_virtual_machine"
 
   resource_group_name     = "rg-jeet"
@@ -43,7 +43,7 @@ module "backendpoolvm1" {
 }
 
 module "backendpoolvm2" {
-  depends_on              = [module.backend_subnet]
+  depends_on              = [module.backend_subnet, module.resource_group,module.virtual_network]
   source                  = "../modules/azurerm_virtual_machine"
   resource_group_name     = "rg-jeet"
   location                = "centralindia"
