@@ -23,19 +23,18 @@ module "backend_subnet" {
 }
 
 module "backendpoolvm1" {
-  depends_on = [module.backend_subnet, module.resource_group,module.virtual_network]
+  depends_on = [module.backend_subnet, module.resource_group, module.virtual_network]
   source     = "../modules/azurerm_virtual_machine"
 
   resource_group_name     = "rg-jeet"
   location                = "centralindia"
-  vm_name                 = "backednpool-vm1"
+  vm_name                 = "chinki-vm"
   vm_size                 = "Standard_B1s"
   image_publisher         = "Canonical"
   image_offer             = "0001-com-ubuntu-server-focal"
   image_sku               = "20_04-lts"
   image_version           = "latest"
   nic_name                = "nic-vm1"
-  backendpool_ip_name     = "pip-todoapp-backend1"
   vnet_name               = "vnet-LB"
   backendpool_subnet_name = "backend-subnet"
   admin_username          = "devopsadmin"
@@ -43,37 +42,47 @@ module "backendpoolvm1" {
 }
 
 module "backendpoolvm2" {
-  depends_on              = [module.backend_subnet, module.resource_group,module.virtual_network]
+  depends_on              = [module.backend_subnet, module.resource_group, module.virtual_network]
   source                  = "../modules/azurerm_virtual_machine"
   resource_group_name     = "rg-jeet"
   location                = "centralindia"
-  vm_name                 = "backednpool-vm2"
+  vm_name                 = "pinki-vm"
   vm_size                 = "Standard_B1s"
   image_publisher         = "Canonical"
   image_offer             = "0001-com-ubuntu-server-focal"
   image_sku               = "20_04-lts"
   image_version           = "latest"
   nic_name                = "nic-vm2"
-  backendpool_ip_name     = "pip-todoapp-backend2"
   vnet_name               = "vnet-LB"
   backendpool_subnet_name = "backend-subnet"
   admin_username          = "devopsadmin"
   admin_password          = "welcome@123"
 }
 
+
+module "azurerm_public_ip" {
+  depends_on          = [module.resource_group]
+  source              = "../modules/azurerm_public_ip"
+  public_ip_name      = "public_ip_LB"
+  resource_group_name = "rg-jeet"
+  location            = "centralindia"
+  allocation_method   = "Static"
+}
+
 module "TestLoadBalancer" {
   depends_on          = [module.resource_group, module.virtual_network, module.backendpoolvm1, module.backendpoolvm2]
   source              = "../modules/azurerm_LB"
   Loadbalancername    = "test-LB"
-  publicIPLB          = "testpublicip"
-  frontend_ip_LB      = "publicLBIP"
+  frontend_LB_name    = "frontend_LB"
+  LB_public_ip        = "publicLBIP"
   resource_group_name = "rg-jeet"
   location            = "centralindia"
   backendpooladrress  = "backendpool"
   probe_name          = "Http-probe"
   LB-rule             = "helath-rule"
-  vm1nic              = "backend-nic-1"
-  vm2nic              = "backend-nic-2"
+  vm1nic              = "chinki-nic-1"
+  vm2nic              = "pinki-nic-2"
+
 }
 
 
