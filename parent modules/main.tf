@@ -14,6 +14,35 @@ module "virtual_network" {
 }
 
 
+module "bastion_subnet" {
+  depends_on = [module.virtual_network]
+  source     = "../modules/azurerm_subnet"
+
+  resource_group_name  = "rg-jeet"
+  virtual_network_name = "vnet-LB"
+  subnet_name          = "AzureBastionSubnet"
+  address_prefixes     = ["10.0.2.0/24"]
+}
+
+module "public_ip_bastion" {
+  source              = "../modules/azurerm_public_ip_lb"
+  public_ip_name      = "bastion_ip"
+  resource_group_name = "rg-jeet"
+  location            = "centralindia"
+  allocation_method   = "Static"
+}
+
+module "bastion" {
+  source       = "../modules/azurerm_bastion"
+  depends_on   = [module.bastion_subnet, module.public_ip_bastion]
+  subnet_name  = "AzureBastionSubnet"
+  vnet_name    = "vnet-LB"
+  rg_name      = "rg-jeet"
+  pip_name     = "bastion_ip"
+  bastion_name = "vnet-lb-bastion"
+  location     = "centralindia"
+}
+
 module "backend_subnet" {
   depends_on           = [module.resource_group,module.virtual_network]
   source               = "../modules/azurerm_subnet"
