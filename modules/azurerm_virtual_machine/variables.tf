@@ -1,3 +1,7 @@
+variable "nsg_name" {
+  
+}
+
 variable "nic_name" {
   type        = string
 }

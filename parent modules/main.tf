@@ -44,7 +44,7 @@ module "bastion" {
 }
 
 module "backend_subnet" {
-  depends_on           = [module.resource_group,module.virtual_network]
+  depends_on           = [module.resource_group, module.virtual_network]
   source               = "../modules/azurerm_subnet"
   resource_group_name  = "rg-jeet"
   virtual_network_name = "vnet-LB"
@@ -54,7 +54,7 @@ module "backend_subnet" {
 
 
 module "chinki_vm" {
-  depends_on = [module.resource_group, module.virtual_network,module.backend_subnet]
+  depends_on = [module.resource_group, module.virtual_network, module.backend_subnet]
   source     = "../modules/azurerm_virtual_machine"
 
   resource_group_name = "rg-jeet"
@@ -70,10 +70,11 @@ module "chinki_vm" {
   backend_subnet_name = "backend-subnet"
   admin_username      = "devopsadmin"
   admin_password      = "welcome@123"
+  nsg_name            = "chinki-nsg"
 }
 
 module "pinki_vm" {
-  depends_on          = [module.resource_group, module.virtual_network,module.backend_subnet]
+  depends_on          = [module.resource_group, module.virtual_network, module.backend_subnet]
   source              = "../modules/azurerm_virtual_machine"
   resource_group_name = "rg-jeet"
   location            = "centralindia"
@@ -88,6 +89,7 @@ module "pinki_vm" {
   backend_subnet_name = "backend-subnet"
   admin_username      = "devopsadmin"
   admin_password      = "welcome@123"
+  nsg_name            = "pinki-nsg"
 }
 
 #### LB Configuration #####
@@ -103,26 +105,26 @@ module "public_ip_lb" {
 
 # LB, frontend_ip_configuration,backend address pool, rule
 module "lb" {
-  depends_on = [module.resource_group,module.public_ip_lb]
+  depends_on = [module.resource_group, module.public_ip_lb]
   source     = "../modules/azurerm_Loadbalancer"
 
 }
 module "chinki2lb_jod_yojna" {
-depends_on = [ module.resource_group,module.chinki_vm ]
+  depends_on            = [module.resource_group, module.chinki_vm]
   source                = "../modules/azurerm_nic_lb_association"
   nic_name              = "nic-chinki-vm"
   resource_group_name   = "rg-jeet"
-  bap_name              = "lb-backendpool1"
+  bap_name              = "lb-Backendaddresspool1"
   lb_name               = "hrsaheb-lb"
   ip_configuration_name = "internal"
 }
 
 module "pinki2lb_jod_yojna" {
-  depends_on = [ module.resource_group,module.pinki_vm ]
+  depends_on            = [module.resource_group, module.pinki_vm]
   source                = "../modules/azurerm_nic_lb_association"
   nic_name              = "nic-pinki-vm"
   resource_group_name   = "rg-jeet"
-  bap_name              = "lb-backendpool1"
+  bap_name              = "lb-Backendaddresspool1"
   lb_name               = "hrsaheb-lb"
   ip_configuration_name = "internal"
 }
