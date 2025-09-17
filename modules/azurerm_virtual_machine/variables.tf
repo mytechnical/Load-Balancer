@@ -1,8 +1,6 @@
 variable "nic_name" {
-  description = "The name of the network interface for the virtual machine."
   type        = string
 }
-
 variable "location" {
   description = "The Azure region where the virtual machine will be created."
   type        = string
@@ -13,15 +11,10 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "backendpool_ip_name" {
-  type=string
-}
-
-variable "backendpool_subnet_name" {
+variable "backend_subnet_name" {
   description = "Frontend Wale Subnet ka naam"
   type        = string
 }
-
 
 variable "vnet_name" {
   description = "Vnet ka naam"
@@ -61,3 +54,5 @@ variable "admin_username" {
 variable "admin_password" {
     type = string
 }
+
+
