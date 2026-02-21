@@ -1,5 +1,5 @@
 
-data "azurerm_public_ip" "ip" {
-  name                = "loadbalancer_ip"
-  resource_group_name = "rg-jeet"
+data "azurerm_public_ip" "pip" {
+  name                = var.public_IP_LB_Attached
+  resource_group_name = var.resource_group_name
 }

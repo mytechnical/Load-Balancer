@@ -1,6 +1,3 @@
-variable "nsg_name" {
-  
-}
 
 variable "nic_name" {
   type        = string
@@ -15,7 +12,7 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "backend_subnet_name" {
+variable "subnet" {
   description = "Frontend Wale Subnet ka naam"
   type        = string
 }

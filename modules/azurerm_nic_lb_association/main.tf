@@ -9,10 +9,9 @@ data "azurerm_lb" "lb" {
 }
 
 data "azurerm_lb_backend_address_pool" "pool" {
-  name            = var.bap_name
+  name            = var.backend_address_pool
   loadbalancer_id = data.azurerm_lb.lb.id
 }
-
 
 # Backend Pool Associations with NIC 
 resource "azurerm_network_interface_backend_address_pool_association" "vm-association" {
@@ -20,5 +19,8 @@ resource "azurerm_network_interface_backend_address_pool_association" "vm-associ
   ip_configuration_name   = var.ip_configuration_name
   backend_address_pool_id = data.azurerm_lb_backend_address_pool.pool.id
 }
+
+
+##backend pool assocaition with appgw
 
 
